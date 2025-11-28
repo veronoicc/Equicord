@@ -50,6 +50,9 @@ const platform = navigator.platform.toLowerCase();
 export const IS_WINDOWS = platform.startsWith("win");
 export const IS_MAC = platform.startsWith("mac");
 export const IS_LINUX = platform.startsWith("linux");
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Browser_detection_using_the_user_agent#mobile_tablet_or_desktop
+// "In summary, we recommend looking for the string Mobi anywhere in the User Agent to detect a mobile device."
+export const IS_MOBILE = navigator.userAgent.includes("Mobi");
 
 export interface Dev {
     name: string;
@@ -629,7 +632,7 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     alfred: {
         name: "alfred",
         id: 1038466644353232967n
-    }
+    },
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
@@ -1022,6 +1025,10 @@ export const EquicordDevs = Object.freeze({
         name: "OIRNOIR",
         id: 720842469024989195n
     },
+    cassie: {
+        name: "cassie",
+        id: 280411966126948353n,
+    },
     mochienya: {
         name: "mochie",
         id: 1043599230247374869n,
@@ -1197,7 +1204,15 @@ export const EquicordDevs = Object.freeze({
     veronoicc: {
         name: "Vero",
         id: 202182544085614592n
-    }
+    },
+    neoarz: {
+        name: "neoarz",
+        id: 1015372540937502851n
+    },
+    KamiRu: {
+        name: "KamiRu",
+        id: 819191621676695563n
+    },
 } satisfies Record<string, Dev>);
 
 // iife so #__PURE__ works correctly
