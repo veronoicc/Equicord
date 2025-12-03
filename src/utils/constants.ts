@@ -633,6 +633,10 @@ export const Devs = /* #__PURE__*/ Object.freeze({
         name: "alfred",
         id: 1038466644353232967n
     },
+    Timbits: {
+        name: "Timbits",
+        id: 841076895281709116n
+    },
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
@@ -1212,10 +1216,6 @@ export const EquicordDevs = Object.freeze({
     KamiRu: {
         name: "KamiRu",
         id: 819191621676695563n
-    },
-    Timbits: {
-        name: "Timbits",
-        id: 841076895281709116n
     },
 } satisfies Record<string, Dev>);
 
