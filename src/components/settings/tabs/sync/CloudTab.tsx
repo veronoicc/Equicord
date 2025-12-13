@@ -19,6 +19,8 @@
 import { useSettings } from "@api/Settings";
 import { authorizeCloud, deauthorizeCloud } from "@api/SettingsSync/cloudSetup";
 import { deleteCloudSettings, eraseAllCloudData, getCloudSettings, putCloudSettings } from "@api/SettingsSync/cloudSync";
+import { Button } from "@components/Button";
+import { Card } from "@components/Card";
 import { CheckedTextInput } from "@components/CheckedTextInput";
 import { Divider } from "@components/Divider";
 import { FormSwitch } from "@components/FormSwitch";
@@ -28,7 +30,7 @@ import { Link } from "@components/Link";
 import { Paragraph } from "@components/Paragraph";
 import { SettingsTab, wrapTab } from "@components/settings/tabs/BaseTab";
 import { Margins } from "@utils/margins";
-import { Alerts, Button, Tooltip, useState } from "@webpack/common";
+import { Alerts, Tooltip, useState } from "@webpack/common";
 
 function validateUrl(url: string) {
     try {
@@ -60,7 +62,7 @@ function SettingsSyncSection() {
             />
             <div className="vc-cloud-settings-sync-grid">
                 <Button
-                    size={Button.Sizes.SMALL}
+                    size="small"
                     disabled={!sectionEnabled}
                     onClick={() => putCloudSettings(true)}
                 >
@@ -71,8 +73,8 @@ function SettingsSyncSection() {
                         <Button
                             onMouseLeave={onMouseLeave}
                             onMouseEnter={onMouseEnter}
-                            size={Button.Sizes.SMALL}
-                            color={Button.Colors.RED}
+                            size="small"
+                            variant="dangerPrimary"
                             disabled={!sectionEnabled}
                             onClick={() => getCloudSettings(true, true)}
                         >
@@ -81,8 +83,8 @@ function SettingsSyncSection() {
                     )}
                 </Tooltip>
                 <Button
-                    size={Button.Sizes.SMALL}
-                    color={Button.Colors.RED}
+                    size="small"
+                    variant="dangerPrimary"
                     disabled={!sectionEnabled}
                     onClick={() => deleteCloudSettings()}
                 >
@@ -108,21 +110,21 @@ function CloudTab() {
     }
 
     return (
-        <SettingsTab title="Equicord Cloud">
+        <SettingsTab>
             <section className={Margins.top16}>
-                <Heading>Cloud Settings</Heading>
-
-                <Paragraph size="md" className={Margins.bottom20}>
-                    Equicord comes with a cloud integration allowing settings to be synced across apps and devices.
-                    <br />
-                    We use our own <Link href="https://github.com/Equicord/Equicloud">Equicloud backend</Link> to provide our cloud instance with enhanced features.
-                    <br />
-                    Our <Link href="https://equicord.org/cloud/policy">privacy policy</Link> allows you to see what information we store, how we use it, and data retention.
-                    <br />
-                    Equicloud is BSD 3.0 licensed so you can host it yourself if you would like.
-                    <br />
-                    You can swap between Equicord and Vencord's different cloud instances below if needed.
-                </Paragraph>
+                <Card defaultPadding={true} className={Margins.bottom16}>
+                    <Paragraph size="md">
+                        Equicord comes with a cloud integration allowing settings to be synced across apps and devices.
+                        <br />
+                        We use our own <Link href="https://github.com/Equicord/Equicloud">Equicloud backend</Link> to provide our cloud instance with enhanced features.
+                        <br />
+                        Our <Link href="https://equicord.org/cloud/policy">privacy policy</Link> allows you to see what information we store, how we use it, and data retention.
+                        <br />
+                        Equicloud is BSD 3.0 licensed so you can host it yourself if you would like.
+                        <br />
+                        You can swap between Equicord and Vencord's different cloud instances below if needed.
+                    </Paragraph>
+                </Card>
                 <FormSwitch
                     key="backend"
                     title="Enable Cloud Integrations"
@@ -135,7 +137,7 @@ function CloudTab() {
                             settings.cloud.authenticated = v;
                     }}
                 />
-                <Heading>Backend URL</Heading>
+                <Heading className={Margins.top16}>Backend URL</Heading>
                 <Paragraph className={Margins.bottom8}>
                     Which backend to use when using cloud integrations.
                 </Paragraph>
@@ -152,7 +154,7 @@ function CloudTab() {
 
                 <Grid columns={2} gap="1em" className={Margins.top8}>
                     <Button
-                        size={Button.Sizes.MEDIUM}
+                        size="medium"
                         disabled={!settings.cloud.authenticated}
                         onClick={async () => {
                             settings.cloud.authenticated = false;
@@ -163,8 +165,8 @@ function CloudTab() {
                         Reauthorize
                     </Button>
                     <Button
-                        size={Button.Sizes.MEDIUM}
-                        color={Button.Colors.RED}
+                        size="medium"
+                        variant="dangerPrimary"
                         disabled={!settings.cloud.authenticated}
                         onClick={() => Alerts.show({
                             title: "Are you sure?",
@@ -177,10 +179,10 @@ function CloudTab() {
                     >
                         Erase All Data
                     </Button>
-                    <Button size={Button.Sizes.MEDIUM} onClick={() => changeUrl("https://cloud.equicord.org/")}>
+                    <Button size="medium" onClick={() => changeUrl("https://cloud.equicord.org/")}>
                         Use Equicord's Cloud
                     </Button>
-                    <Button size={Button.Sizes.MEDIUM} onClick={() => changeUrl("https://api.vencord.dev/")}>
+                    <Button size="medium" onClick={() => changeUrl("https://api.vencord.dev/")}>
                         Use Vencord's Cloud
                     </Button>
                 </Grid>

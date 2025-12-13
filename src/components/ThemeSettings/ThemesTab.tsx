@@ -21,6 +21,7 @@ import "./themesStyles.css";
 import { isPluginEnabled } from "@api/PluginManager";
 import { Settings, useSettings } from "@api/Settings";
 import { classNameFactory } from "@api/Styles";
+import { Button } from "@components/Button";
 import { Card } from "@components/Card";
 import { Divider } from "@components/Divider";
 import { ErrorCard } from "@components/ErrorCard";
@@ -43,7 +44,7 @@ import { getThemeInfo, stripBOM, type UserThemeHeader } from "@utils/themes/bd";
 import { usercssParse } from "@utils/themes/usercss";
 import { getStylusWebStoreUrl } from "@utils/web";
 import { findLazy } from "@webpack";
-import { Alerts, Button, React, showToast, TabBar, TextInput, Tooltip, useEffect, useMemo, useRef, useState } from "@webpack/common";
+import { Alerts, React, showToast, TabBar, TextInput, Tooltip, useEffect, useMemo, useRef, useState } from "@webpack/common";
 import type { ComponentType, Ref, SyntheticEvent } from "react";
 import type { UserstyleHeader } from "usercss-meta";
 
@@ -81,7 +82,7 @@ function Validator({ link, onValidate }: { link: string; onValidate: (valid: boo
             : "Valid!";
 
     return <Paragraph style={{
-        color: pending ? "var(--text-muted)" : err ? "var(--text-danger)" : "var(--status-positive)"
+        color: pending ? "var(--text-muted)" : err ? "var(--text-feedback-critical)" : "var(--status-positive)"
     }}>{text}</Paragraph>;
 }
 
@@ -468,7 +469,7 @@ function ThemesTab() {
         }));
 
         return (
-            <>;
+            <>
                 <section>
                     <Heading>Online Themes</Heading>
                     <Card className="vc-settings-theme-add-card">
@@ -519,7 +520,7 @@ function ThemesTab() {
     }
 
     return (
-        <SettingsTab title="Themes">
+        <SettingsTab>
             <TabBar
                 type="top"
                 look="brand"
@@ -599,7 +600,7 @@ export function CspErrorCard() {
                         {i !== 0 && <Divider className={Margins.bottom8} />}
                         <div className="vc-settings-csp-row">
                             <Link href={url}>{url}</Link>
-                            <Button color={Button.Colors.PRIMARY} onClick={() => allowUrl(url)} disabled={isImgurHtmlDomain(url)}>
+                            <Button variant="secondary" onClick={() => allowUrl(url)} disabled={isImgurHtmlDomain(url)}>
                                 Allow
                             </Button>
                         </div>
@@ -622,7 +623,7 @@ export function CspErrorCard() {
 
 function UserscriptThemesTab() {
     return (
-        <SettingsTab title="Themes">
+        <SettingsTab>
             <Card className="vc-settings-card">
                 <Heading>Themes are not supported on the Userscript!</Heading>
 
