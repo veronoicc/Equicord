@@ -753,13 +753,16 @@ function processQuestForAutoComplete(quest: Quest): boolean {
     const watchType = quest.config.taskConfigV2?.tasks.WATCH_VIDEO || quest.config.taskConfigV2?.tasks.WATCH_VIDEO_ON_MOBILE;
     const questDuration = playType?.target || watchType?.target || 0;
     const existingInterval = activeQuestIntervals.get(quest.id);
+    QuestifyLogger.info(`[${getFormattedNow()}] Processing Quest ${questName} for auto-completion.`);
+    const isWindowsSpoof = VesktopNative.app?.isWindowsSpoof ? VesktopNative.app.isWindowsSpoof() : false;
+    QuestifyLogger.warn(`[${getFormattedNow()}] isWindowsSpoof: ${isWindowsSpoof}.`);
 
     if (quest.userStatus?.completedAt || existingInterval) {
         return true;
     } else if (!playType && !watchType) {
         QuestifyLogger.warn(`[${getFormattedNow()}] Could not recognize the Quest type for ${questName}.`);
         return true;
-    } else if ((watchType && !completeVideoQuestsInBackground) || (playType && (!completeGameQuestsInBackground || !IS_DISCORD_DESKTOP))) {
+    } else if ((watchType && !completeVideoQuestsInBackground) || (playType && (!completeGameQuestsInBackground || (!IS_DISCORD_DESKTOP && !isWindowsSpoof)))) {
         return true;
     } else if (!questDuration) {
         QuestifyLogger.warn(`[${getFormattedNow()}] Could not find duration for Quest ${questName}.`);
@@ -777,11 +780,12 @@ function processQuestForAutoComplete(quest: Quest): boolean {
 
 function shouldDisableQuestAcceptedButton(quest: Quest): boolean | null {
     const { completeGameQuestsInBackground } = settings.store;
+    const isWindowsSpoof = VesktopNative.app?.isWindowsSpoof ? VesktopNative.app.isWindowsSpoof() : false;
 
     if (activeQuestIntervals.has(quest.id)) {
         return true;
     } else if (completeGameQuestsInBackground) {
-        if (!IS_DISCORD_DESKTOP) {
+        if (!IS_DISCORD_DESKTOP && !isWindowsSpoof) {
             return true;
         } else {
             return false;
@@ -802,11 +806,12 @@ function getQuestAcceptedButtonText(quest: Quest): string | null {
     const progress = Math.min((intervalData?.progress ?? (quest.userStatus?.progress?.[taskType?.type || ""]?.value || 0)), duration);
     const timeRemaining = Math.max(0, duration - progress);
     const progressFormatted = `${String(Math.floor(timeRemaining / 60)).padStart(2, "0")}:${String(timeRemaining % 60).padStart(2, "0")}`;
+    const isWindowsSpoof = VesktopNative.app?.isWindowsSpoof ? VesktopNative.app.isWindowsSpoof() : false;
 
     if (questEnrolledAt && ((playType && completeGameQuestsInBackground) || (watchType && completeVideoQuestsInBackground))) {
         if (!!intervalData) {
             return timeRemaining ? `Completing (${progressFormatted})` : "Completing...";
-        } else if (watchType || (playType && IS_DISCORD_DESKTOP)) {
+        } else if (watchType || (playType && (IS_DISCORD_DESKTOP || isWindowsSpoof))) {
             return `Resume (~${progressFormatted})`;
         }
     }
@@ -1214,6 +1219,13 @@ export default definePlugin({
                     // Add the trigger to the memo for rerendering Quests order due to progress changes, etc.
                     match: /(?<=id\);.{0,100}?,\i},\[\i,\i)/,
                     replace: ",questRerenderTrigger,questifySorted"
+                },
+                /* just make this have true in instead of  (0, S.isWeb)() */
+                {
+                    // Make desktop compatible.
+                    // (0, S.isWeb)()
+                    match: /\(0,\w+\.isWeb\)\(\)/,
+                    replace: "false"
                 }
             ]
         },
