@@ -640,7 +640,7 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     vv: {
         name: "VV",
         id: 254866377087778816n
-    },
+    }
 } satisfies Record<string, Dev>);
 
 export const EquicordDevs = Object.freeze({
